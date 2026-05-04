@@ -121,7 +121,7 @@ border-bottom: 4px solid var(--gold);
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 const firebaseConfig = {
 apiKey: "AIzaSyC-yp6_JCza1I9J4SXrwhs5QwWcOX7G4wA",
@@ -164,7 +164,7 @@ imgUrl = await getDownloadURL(storageRef);
 }
 
 if((txt || imgUrl) && user) { // يسمح بالنشر نص فقط، صورة فقط، أو الاثنين
-await addDoc(collection(db, "posts"), { author: user.name, fac: user.fac, text: txt, img: imgUrl, pic: user.pic, likes: 0, time: serverTimestamp() });
+await addDoc(collection(db, "posts"), { author: user.name, fac: user.fac, text: txt, img: imgUrl, pic: user.pic, likes: [], time: serverTimestamp() });
 document.getElementById('pText').value = "";
 document.getElementById('postImage').value = ""; // إعادة تعيين حقل الصورة
 }
@@ -177,15 +177,29 @@ const p = s.data(); const id = s.id;
 list.innerHTML += `
 <div class="post-card">
 <div class="user-info"><img src="${p.pic}" class="user-pic"><div><b>${p.author}</b><br><small>#${p.fac}</small></div></div>
-<p>${p.text}</p>
+<p>${p.text || ""}</p>
+${p.img ? `<img src="${p.img}" style="width:100%; border-radius:10px; margin-top:10px;">` : ""}
 <div class="react-bar">
-<button class="react-btn" onclick="window.likePost('${id}')">👍 ${p.likes || 0}</button>
+<button class="react-btn" onclick="window.likePost('${id}')">👍 ${p.likes ? p.likes.length : 0}</button>
 </div>
 </div>`;
 });
 });
 
-window.likePost = async (id) => { await updateDoc(doc(db, "posts", id), { likes: increment(1) }); };
+
+window.likePost = async (id, likes = []) => {
+  if (!user) return;
+
+  const refPost = doc(db, "posts", id);
+
+  const alreadyLiked = likes.includes(user.name);
+
+  await updateDoc(refPost, {
+    likes: alreadyLiked
+      ? arrayRemove(user.name)
+      : arrayUnion(user.name)
+  });
+};
 
 let currentChat = "general"; // افتراضي عام
 
