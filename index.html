@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAU UNFILTERED | الساحة إلك 🚀</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Pacifico&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root { --navy: #002147; --gold: #D4AF37; --red: #ff4d4d; --bg: #0f172a; }
+* { box-sizing: border-box; transition: 0.3s; margin: 0; padding: 0; }
+body { font-family: 'Cairo', sans-serif; background: var(--bg); color: white; overflow-x: hidden; }
+
+header { background: var(--navy); padding: 15px; text-align: center; border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+.logo { font-family: 'Pacifico', cursive; font-size: 30px; color: var(--gold); }
+.logo span { color: var(--red); text-shadow: 0 0 10px var(--red); }
+
+#loginOverlay { position: fixed; inset: 0; background: var(--navy); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+.login-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); padding: 30px; border-radius: 30px; width: 90%; max-width: 400px; border: 1px solid var(--gold); text-align: center; }
+input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; border: none; background: rgba(255,255,255,0.1); color: white; outline: none; }
+.fire-btn { background: var(--gold); color: var(--navy); border: none; padding: 15px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; font-size: 18px; }
+
+.main-container { display: grid; grid-template-columns: 280px 1fr 350px; gap: 20px; max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+
+.admin-hero {
+position: sticky; top: 100px; height: 70vh;
+background: linear-gradient(to top, var(--bg) 10%, transparent 70%), url('https://i.ibb.co/Z1R6K32v/Whats-App-Image-2026-03-31-at-11-25-14.jpg');
+background-size: cover; background-position: center; border-radius: 25px; display: flex; flex-direction: column; justify-content: flex-end;
+}
+.admin-hero .glass-box {
+transform: translateY(110px);
+}
+
+.glass-box {
+background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255,255,255,0.2);
+padding: 15px;
+border-radius: 20px;
+margin: 15px;
+margin-bottom: 60px; /* 👈 هذا اللي بنزّله فعلياً */
+border-bottom: 4px solid var(--gold);
+}
+.post-card { background: white; color: var(--navy); border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+.user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.user-pic { width: 45px !important; height: 45px !important; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+
+.react-bar { display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+.react-btn { background: #f0f2f5; border: none; padding: 5px 12px; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 13px; }
+.react-btn.active { background: var(--gold); color: white; }
+
+/* الشات */
+.chat-wrap { position: fixed; bottom: 20px; left: 20px; z-index: 2000; }
+.chat-trigger { width: 60px; height: 60px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.chat-panel { position: absolute; bottom: 70px; left: 0; width: 300px; height: 400px; background: white; border-radius: 15px; display: none; flex-direction: column; overflow: hidden; color: var(--navy); }
+
+@media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } .admin-hero { height: 350px; position: relative; top: 0; order: -1; } .sidebar-left { display: none; } }
+</style>
+</head>
+<body>
+
+<div id="loginOverlay">
+<div class="login-card">
+<h1 style="color:var(--gold); font-family:'Pacifico';">aau unfiltered</h1>
+<input type="text" id="regName" placeholder="اسمك المستعار...">
+<select id="regFac">
+<option value="">اختر كليتك...</option>
+<option>IT (الوحوش) 💻</option>
+<option>Business (الهوامير) 💰</option>
+<option>Engineering (المهندسين) ⚙️</option>
+<option>حقوق (القادة) ⚖️</option>
+</select>
+<button id="btnAuth" class="fire-btn">دخول الساحة 🚀</button>
+</div>
+</div>
+
+<header><div class="logo">aau unfiltere<span>d 🌶️</span></div></header>
+
+<div class="main-container">
+<div class="sidebar-left">
+<div class="glass-box"><h3>🔥 الإحصائيات</h3><p>الملك: كرم إياد 👑</p></div>
+</div>
+<div class="feed">
+<div class="glass-box">
+<textarea id="pText" placeholder="شو الأكشن اليوم؟" style="width:100%; height:70px; background:transparent; border:none; color:white; outline:none; resize:none;"></textarea>
+<input type="file" id="postImage" accept="image/*" style="display:none;">
+<button id="uploadPostImg" style="background:#002147; color:white; border-radius:8px; border:none; padding:5px 10px; margin-bottom:5px;">📷 صورة</button>
+<button id="btnPost" style="background:var(--gold); color:var(--navy); padding:8px 20px; border-radius:50px; font-weight:bold; cursor:pointer; float:left;">نشر 🔥</button>
+<div style="clear:both;"></div>
+</div>
+<div id="feedList"></div>
+</div>
+<div class="admin-hero">
+<div class="glass-box">
+<span style="background:var(--gold); color:var(--navy); padding:2px 8px; border-radius:5px; font-weight:bold; font-size:10px;">OWNER</span>
+<h2 style="font-family:'Bebas Neue';">KARAM EYAD</h2>
+<p style="font-size:12px; opacity:0.8;">Admin & MIS Developer</p>
+</div>
+</div>
+</div>
+
+<div class="chat-wrap">
+<div class="chat-trigger" onclick="document.getElementById('cBox').style.display = document.getElementById('cBox').style.display === 'flex' ? 'none' : 'flex'">💬</div>
+<div class="chat-panel" id="cBox">
+<div style="background:var(--navy); color:white; padding:10px; font-weight:bold; display:flex; gap:5px; flex-wrap:wrap;">
+<button class="chat-tab" data-chat="general">عام</button>
+<button class="chat-tab" data-chat="Business">أعمال</button>
+<button class="chat-tab" data-chat="IT">IT</button>
+<button class="chat-tab" data-chat="Aviation">طيران</button>
+<button class="chat-tab" data-chat="Pharmacy">صيدلة</button>
+<button class="chat-tab" data-chat="Arts">آداب وعلوم</button>
+</div>
+<div id="cMsgs" style="flex:1; overflow-y:auto; padding:10px; background:#f9f9f9; display:flex; flex-direction:column; gap:5px;"></div>
+<div style="padding:10px; display:flex; gap:5px;">
+<input type="text" id="cInput" placeholder="اكتب.." style="color:black; background:#eee; flex:1;">
+<input type="file" id="cImage" accept="image/*" style="display:none;">
+<button id="uploadImg" style="background:#002147; color:white; border-radius:8px; border:none; padding:5px 10px;">📷</button>
+<button id="sendMsg" style="background:var(--gold); padding:5px 10px; border-radius:8px; border:none;">></button>
+</div>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+const firebaseConfig = {
+apiKey: "AIzaSyC-yp6_JCza1I9J4SXrwhs5QwWcOX7G4wA",
+authDomain: "aau-unfiltered.firebaseapp.com",
+projectId: "aau-unfiltered",
+storageBucket: "aau-unfiltered.firebasestorage.app",
+messagingSenderId: "466453503356",
+appId: "1:466453503356:web:16f875a9d452d128e8d8f9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+let user = JSON.parse(localStorage.getItem('aau_user'));
+if(user) document.getElementById('loginOverlay').style.display = 'none';
+
+document.getElementById('btnAuth').addEventListener('click', () => {
+const name = document.getElementById('regName').value;
+const fac = document.getElementById('regFac').value;
+if(name && fac) {
+localStorage.setItem('aau_user', JSON.stringify({name, fac, pic: "https://cdn-icons-png.flaticon.com/512/149/149071.png"}));
+location.reload();
+}
+});
+
+
+// فتح نافذة اختيار الصورة عند الضغط على زر 📷
+document.getElementById('uploadPostImg').addEventListener('click', () => {
+document.getElementById('postImage').click();
+});
+document.getElementById('btnPost').addEventListener('click', async () => {
+const txt = document.getElementById('pText').value;
+const file = document.getElementById('postImage').files[0]; // الصورة
+let imgUrl = "";
+
+if(file && user) {
+const storageRef = ref(storage, `posts/${Date.now()}_${file.name}`);
+await uploadBytes(storageRef, file);
+imgUrl = await getDownloadURL(storageRef);
+}
+
+if((txt || imgUrl) && user) { // يسمح بالنشر نص فقط، صورة فقط، أو الاثنين
+await addDoc(collection(db, "posts"), { author: user.name, fac: user.fac, text: txt, img: imgUrl, pic: user.pic, likes: 0, time: serverTimestamp() });
+document.getElementById('pText').value = "";
+document.getElementById('postImage').value = ""; // إعادة تعيين حقل الصورة
+}
+});
+
+onSnapshot(query(collection(db, "posts"), orderBy("time", "desc")), (snap) => {
+const list = document.getElementById('feedList'); list.innerHTML = "";
+snap.forEach(s => {
+const p = s.data(); const id = s.id;
+list.innerHTML += `
+<div class="post-card">
+<div class="user-info"><img src="${p.pic}" class="user-pic"><div><b>${p.author}</b><br><small>#${p.fac}</small></div></div>
+<p>${p.text}</p>
+<div class="react-bar">
+<button class="react-btn" onclick="window.likePost('${id}')">👍 ${p.likes || 0}</button>
+</div>
+</div>`;
+});
+});
+
+window.likePost = async (id) => { await updateDoc(doc(db, "posts", id), { likes: increment(1) }); };
+
+let currentChat = "general"; // افتراضي عام
+
+// تغيير الشات عند الضغط على التبويب
+document.querySelectorAll('.chat-tab').forEach(btn => {
+btn.addEventListener('click', () => {
+currentChat = btn.dataset.chat;
+loadChat(); // تحميل الرسائل للشات المختار
+});
+});
+
+// إرسال رسالة للشات الحالي
+document.getElementById('sendMsg').addEventListener('click', async () => {
+const m = document.getElementById('cInput').value;
+if(m && user) {
+let colName = currentChat === "general" ? "chats" : `chats_${currentChat}`;
+await addDoc(collection(db, colName), { user: user.name, msg: m, time: serverTimestamp() });
+document.getElementById('cInput').value = "";
+}
+});
+
+// فتح اختيار الصورة عند الضغط على زر 📷
+document.getElementById('uploadImg').addEventListener('click', () => {
+document.getElementById('cImage').click();
+});
+
+// رفع الصورة عند اختيارها
+document.getElementById('cImage').addEventListener('change', async (e) => {
+const file = e.target.files[0];
+if(file && user) {
+const storageRef = ref(storage, `${currentChat}/${Date.now()}_${file.name}`);
+await uploadBytes(storageRef, file);
+const url = await getDownloadURL(storageRef);
+
+// إرسال رابط الصورة كرسالة
+let colName = currentChat === "general" ? "chats" : `chats_${currentChat}`;
+await addDoc(collection(db, colName), { user: user.name, img: url, time: serverTimestamp() });
+}
+});
+
+// تحميل الرسائل حسب الشات الحالي
+function loadChat() {
+let colName = currentChat === "general" ? "chats" : `chats_${currentChat}`;
+const q = query(collection(db, colName), orderBy("time", "asc"));
+onSnapshot(q, (snap) => {
+const box = document.getElementById('cMsgs');
+box.innerHTML = "";
+snap.forEach(d => {
+const m = d.data();
+if(m.msg) {
+box.innerHTML += `<div style="font-size:12px;"><b>${m.user}:</b> ${m.msg}</div>`;
+}
+if(m.img) {
+box.innerHTML += `<div><b>${m.user}:</b><br><img src="${m.img}" style="max-width:100%; border-radius:10px;"></div>`;
+}
+});
+box.scrollTop = box.scrollHeight;
+});
+}
+
+// تحميل الشات العام عند البداية
+loadChat();
+</script>
+</body>
+</html>
